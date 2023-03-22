@@ -1,5 +1,6 @@
-## Docs
-- [arch wiki link](https://wiki.archlinux.org/title/Network_configuration/Wireless#Check_the_driver_status)
+## Docs 
+- [arch wiki](https://wiki.archlinux.org/title/Installation_guide)
+- [arch wiki wifi link](https://wiki.archlinux.org/title/Network_configuration/Wireless#Check_the_driver_status)
 - From [This arch wiki post](https://bbs.archlinux.org/viewtopic.php?id=248549)
 
 > What is the output of the following command?
