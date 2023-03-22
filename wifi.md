@@ -12,6 +12,9 @@ lsmod | grep rtl
 ```
 modprobe rtl8821ae
 ```
+
+- https://unix.stackexchange.com/questions/567882/wifi-menu-not-working-during-installation-of-arch-linux-no-wifi-interface-is-sh#571076
+
 > If that fails, post the error message.
 
 ## Driver
