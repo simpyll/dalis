@@ -29,11 +29,11 @@ David's Arch Linux Install Scripts
 ## Features 
 
 There are 5 scripts to choose from:
-1. <b>dalis.sh<b> - The standard basic install
-1. <b>dalis-barebones.sh<b> - The absolute minimal install needed
-1. <b>dalis-lvm.sh<b> - Root on a logical volume
-1. <b>dalis-luks.sh<b> - Root encrypted
-1. <b>dalis-lvm-luks.sh<b> - Root on a logical volume and encrypted
+1. <b>dalis.sh</b> - The standard basic install
+1. <b>dalis-barebones.sh</b> - The absolute minimal install needed
+1. <b>dalis-lvm.sh</b> - Root on a logical volume
+1. <b>dalis-luks.sh</b> - Root encrypted
+1. <b>dalis-lvm-luks.sh</b> - Root on a logical volume and encrypted
 
 ## Download
 
