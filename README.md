@@ -1,1 +1,1 @@
-# David's Arch Linux Install Script (Dalis)
+# David's Arch Linux Install Scripts (Dalis)
