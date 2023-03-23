@@ -24,14 +24,29 @@ David's Arch Linux Install Scripts
 </p>
 
 
-1. Set keyboard layout
-1. Connect to the internet
-   1. [Connect - Documentation](https://github.com/simpyll/dalis/blob/main/docs/connect.md)
-   1. [Connect - Script](#)
-  
-1. 
+## Overview 
+
+## Features 
+
+There are 5 scripts to choose from:
+1. <b>dalis.sh<b> - The standard basic install
+1. <b>dalis-barebones.sh<b> - The absolute minimal install needed
+1. <b>dalis-lvm.sh<b> - Root on a logical volume
+1. <b>dalis-luks.sh<b> - Root encrypted
+1. <b>dalis-lvm-luks.sh<b> - Root on a logical volume and encrypted
+
+## Download
 
 ```
 curl -LO raw.githubusercontent.com/simpyll/dalis/main/dalis.bash
+```
+
+## Installation
+
+```
 sh dalis.bash
 ```
+
+## Structure 
+
+## License
