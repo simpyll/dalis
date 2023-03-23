@@ -33,8 +33,8 @@ mount /dev/sda1 /mnt/boot
 
 pacstrap /mnt \
     base base-devel linux linux-firmware \
-    iw wget openssh wpa_supplicant wireless_tools dhcpcd dialog git networkmanager \
-    intel-ucode nvidia nvidia-libgl nidia-utils \
+    iw wget openssh wpa_supplicant wireless_tools dhcpcd dialog git networkmanager intel-ucode \
+    
 #   xorg-server xorg-server-utils xorg-xinit xf86-input-synaptics xf86-video-intel \
 #   i3 rxvt-unicode \
 #   vim vim-spell-en \
