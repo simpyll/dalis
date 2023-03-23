@@ -31,6 +31,7 @@ David's Arch Linux Install Scripts
   
 1. 
 
-
+```
 curl -LO raw.githubusercontent.com/simpyll/dalis/main/dalis.bash
 sh dalis.bash
+```
