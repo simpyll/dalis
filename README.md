@@ -26,6 +26,16 @@ David's Arch Linux Install Scripts
 
 ## Overview 
 
+Dalis is a collection of Arch Linux install scripts that serve 2 purposes:
+
+1. Quickly format and reinstall Arch Linux on my own system.
+1. Help others understand how to build their own scripts. 
+
+Number 2 is accomplished in 2 key ways:
+
+1. Using plain language via comments to get a through understanding of what each command is doing. 
+1. Create an 'awesome' collection of various Arch Linux install scripts and guides found around the web
+
 ## Features 
 
 There are 5 scripts to choose from:
