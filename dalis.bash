@@ -1,16 +1,29 @@
 #! /bin/bash
 
+# DESTROY EVERYTHING AND CREATE 2 PARTITIONS - ONE FOR BOOT AND ONE FOR ROOT
 # '-Z' Zap (destroy) the GPT and MBR data structures and then exit.
 # -a, --set-alignment=value - 2048 on disks with 512-byte sectors
 # -o, --clear - Clear out all partition data on /dev/sda
 # -n, --new=partnum:start:end - Create  2 new partitions. Create partitions with sizes 512M for boot and the remainder aka "-t" for root.
 sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00
 
-
+# ENCRYPT THE ROOT PARTITION
+# The -c aes-xts-plain64 tells cryptsetup the cipher used to encrypt the disk (cat /proc/crypto will show you all possibilities). 
+# -s 512 tells cryptsetup which keylength to use for the real encryption key (unlike the passphrase or keyfile, which are used to access this real encryption key). 
+# Finally -y forces you to type your password twice. 
 cryptsetup -c aes-xts-plain64 -s 512 -h sha512 -i 5000 --use-random --verify-passphrase luksFormat /dev/sda2
+
+# CREATE A MAPPING IN THE ROOT PARTITION
+# This command creates the mapping device node for the unlocked LUKS partition at /dev/mapper/luks
 cryptsetup luksOpen /dev/sda2 luks
+
+# CREATE A PHYSICAL VOLUME ON TOP OF THE OPENED LUKS CONTAINER
 pvcreate /dev/mapper/luks
+
+# CREATE A VOLUME GROUP NAMED "VG"
+# this is also the name that will be directly accessible under the /dev filesystems
 vgcreate vg /dev/mapper/luks
+
 lvcreate -l 100%FREE vg
 mkfs.ext4 /dev/mapper/vg-lvol0
 mkfs.fat -F32 /dev/sda1
