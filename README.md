@@ -26,4 +26,7 @@ David's Arch Linux Install Scripts
 
 1. Set keyboard layout
 1. Connect to the internet
+   1. [Connect Docs](https://github.com/simpyll/dalis/blob/main/docs/connect.md)
+   1. [Connect Script](#)
+  
 1. 
