@@ -1,3 +1,16 @@
+# WIFI
+
+## iwctl
+
+```
+iwctl device list
+iwctl station <stationname> scan
+iwctl station <stationname> get-networks
+iwctl station <stationname> connect <ssid> -P <password>
+```
+
+where <stationname> = wlan0 most of the time.
+
 # Connect to the internet
 
 We need to make sure that we are connected to the internet to be able to install Arch Linux `base` and `linux` packages. Let’s see the names of our interfaces.
