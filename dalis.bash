@@ -14,7 +14,7 @@ mount /dev/sda1 /mnt/boot
 
 pacstrap /mnt \
     base base-devel linux linux-firmware \
-    iw wget openssh wpa_supplicant wireless_tools dhcpcd dialog git \
+    iw wget openssh wpa_supplicant wireless_tools dhcpcd dialog git NetworkManager \
     intel-ucode nvidia nvidia-libgl nidia-utils \
 #   xorg-server xorg-server-utils xorg-xinit xf86-input-synaptics xf86-video-intel \
 #   i3 rxvt-unicode \
