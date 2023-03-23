@@ -10,15 +10,15 @@ David's Arch Linux Install Scripts
 |
 <b><a href="#features">Features</a></b>
 |
+<b><a href="#download">Download</a></b>
+|
 <b><a href="#installation">Installation</a></b>
-|
-<b><a href="#updating">Updating</a></b>
-|
-<b><a href="#setup">Setup</a></b>
 |
 <b><a href="#structure">Structure</a></b>
 |
-<b><a href="#credits">Credits</a></b>
+<b><a href="#structure">Structure</a></b>
+|
+<b><a href="#roadmap">Roadmap</a></b>
 |
 <b><a href="#license">License</a></b>
 </p>
@@ -48,5 +48,7 @@ sh dalis.bash
 ```
 
 ## Structure 
+
+## Roadmap
 
 ## License
