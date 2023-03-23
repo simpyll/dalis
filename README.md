@@ -23,13 +23,7 @@ David's Arch Linux Install Scripts
 <b><a href="#license">License</a></b>
 </p>
 
-<br>
-<!--
-## Installation
 
-```bash
-
-wget -O - tinyurl.com/simpyll | bash
-
-```
--->
+1. Set keyboard layout
+1. Connect to the internet
+1. 
