@@ -1,6 +1,12 @@
 #! /bin/bash
 
+# '-Z' Zap (destroy) the GPT and MBR data structures and then exit.
+# -a, --set-alignment=value - 2048 on disks with 512-byte sectors
+# -o, --clear - Clear out all partition data on /dev/sda
+# -n, --new=partnum:start:end - Create  2 new partitions. Create partitions with sizes 512M for boot and the remainder aka "-t" for root.
 sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00
+
+
 cryptsetup -c aes-xts-plain64 -s 512 -h sha512 -i 5000 --use-random --verify-passphrase luksFormat /dev/sda2
 cryptsetup luksOpen /dev/sda2 luks
 pvcreate /dev/mapper/luks
