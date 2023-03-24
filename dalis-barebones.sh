@@ -46,7 +46,7 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # install base packages to mnt
-pacstrap /mnt base base-devel linux linux-firmware intel-ucode
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager
 
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
@@ -80,11 +80,24 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 # generate the ramdisks using the presets inside chroot
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
-# bootloader: systemd-boot to /boot/
+# bootloader setup: systemd-boot to /boot/ inside chroot
 arch-chroot /mnt /bin/bash -c 'bootctl install'
 
-
+# config the bootloader file /boot/loader/entries/arch.conf inside chroot
 arch-chroot /mnt /bin/bash -c 'echo "title Arch Linux
 linux /vmlinuz-linux
+initrd /intel-ucode.img
 initrd /initramfs-linux.img
 options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw" >> /boot/loader/entries/arch.conf'
+
+# enable networkmanager
+arch-chroot /mnt /bin/bash -c 'systemctl enable NetworkManager'
+
+# start networkmanager
+arch-chroot /mnt /bin/bash -c 'systemctl start NetworkManager'
+
+# There's no need to `exit` because you never entered chroot. Everything was done from the iso.
+# Now we just unmount the filesystem
+umount -R /mnt
+
+# all you need to do now is `poweroff` or `restart`. I prefer to poweroff so I can remove the usb without concern before booting back on.
