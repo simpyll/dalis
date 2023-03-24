@@ -96,7 +96,7 @@ initrd /intel-ucode.img
 initrd /initramfs-linux.img
 options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw" >> /boot/loader/entries/arch.conf'
 
-# If using grub remove comments from the next 4 lines to create a bootable mount point. 
+# If using grub comment out the above section and then remove comments from the next 4 lines to create a bootable mount point. 
 # arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
 # arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI/'
 # arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --removable --recheck'
