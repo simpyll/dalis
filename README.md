@@ -28,14 +28,15 @@ David's Arch Linux Install Scripts
 
 ## Overview 
 
-Dalis is a collection of Arch Linux install scripts that serve 2 purposes:
+Dalis is a collection of Arch Linux install scripts that serve 3 purposes:
 
 1. Quickly format and reinstall Arch Linux on my own system.
 1. Help others understand how to build their own scripts via through commenting within each script.
+1. Create [a cental 'awesome' collection](https://github.com/simpyll/dalis/tree/main/reference) of various arch linux scripts and install guides found around the web.
 
 ## Features 
 
-The key feature that separates these implementations from others is that these are complete scipts. There is no need to type in anything yourself, except for when you create new root and/or user passwords when prompted. 
+The key feature that separates these implementations from others is that these scripts are built to be as 'hands off' as possible. There is no need to type in anything yourself, except for when you create a new root and/or user password when prompted. Even things like hostname and user are pre-assigned, so unless you want your hostname to be 'arch' and your user to be 'david' you will need to modify these. Other things to consider modifying are locals, keymap, timezone, language, etc.
 
 There are 5 scripts to choose from:
 1. <b>dalis.sh</b> - The standard basic install
