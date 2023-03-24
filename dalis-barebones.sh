@@ -21,16 +21,16 @@
 # curl -LO https://raw.githubusercontent.com/simpyll/dalis/main/dalis-barebones.sh
 # sh dalis-barebones.sh
 
-# Wipe file system and create two new partitions (boot and root).
+# wipe file system and create two new partitions (boot and root).
 sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00 
 
-# Enable NTP
+# enable NTP
 timedatectl set-ntp true
 
-# Set timezone
+# set timezone
 timedatectl set-timezone America/Chicago
 
-# Make sda1 a fat32 partition for boot
+# make sda1 a fat32 partition for boot
 mkfs.fat -F32 /dev/sda1
 
 # make a boot directory at /mnt/boot
@@ -69,5 +69,13 @@ arch-chroot /mnt /bin/bash -c 'locale-gen'
 # set clock inside chroot 
 arch-chroot /mnt /bin/bash -c 'hwclock --systohc --utc'
 
+# Set the hosts file inside chroot
+arch-chroot /mnt /bin/bash -c 'echo "127.0.0.1 localhost
+::1 localhost
+127.0.1.1 arch.localdomain arch" >> /etc/hosts'
+
 # set root password inside chroot
 arch-chroot /mnt /bin/bash -c 'passwd'
+
+# generate the ramdisks using the presets inside chroot
+arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
