@@ -24,8 +24,10 @@
 # Wipe file system and create two new partitions (boot and root).
 sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00 
 
-# Enable NTP and set timezone
+# Enable NTP
 timedatectl set-ntp true
+
+# Set timezone
 timedatectl set-timezone America/Chicago
 
 # Make sda1 a fat32 partition for boot
@@ -49,12 +51,20 @@ pacstrap /mnt base base-devel linux linux-firmware
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
 
-# set locals, language, keymap, timezone and clock inside chroot from iso
-arch-chroot /mnt /bin/bash -c '
-echo "en_US.UTF-8" > /etc/locale.gen
-echo "KEYMAP=us" > /etc/vconsole.conf
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
-ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime
-locale-gen
-hwclock --systohc --utc
-'
+# set locale inside chroot 
+arch-chroot /mnt /bin/bash -c 'echo "en_US.UTF-8" > /etc/locale.gen'
+
+# set keymap inside chroot 
+arch-chroot /mnt /bin/bash -c 'echo "KEYMAP=us" > /etc/vconsole.conf'
+
+# set language inside chroot 
+arch-chroot /mnt /bin/bash -c 'echo "LANG=en_US.UTF-8" > /etc/locale.conf'
+
+# set timezone inside chroot 
+arch-chroot /mnt /bin/bash -c 'ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime'
+
+# set generate localisation from templates inside chroot 
+arch-chroot /mnt /bin/bash -c 'locale-gen'
+
+# set clock inside chroot 
+arch-chroot /mnt /bin/bash -c 'hwclock --systohc --utc'
