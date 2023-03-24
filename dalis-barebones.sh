@@ -48,3 +48,13 @@ pacstrap /mnt base base-devel linux linux-firmware
 
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
+
+# set language and locals inside chroot from iso
+arch-chroot /mnt /bin/bash -c '
+echo "en_US.UTF-8" > /etc/locale.gen
+echo "KEYMAP=us" > /etc/vconsole.conf
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime
+locale-gen
+hwclock --systohc --utc
+'
