@@ -30,7 +30,7 @@ David's Arch Linux Install Scripts
 
 Dalis is a collection of Arch Linux install scripts that serve 3 purposes:
 
-1. Quickly format and reinstall Arch Linux on my own system.
+1. Quickly format and reinstall Arch Linux on my own system. The various dalis scripts are found in the root of this repo.
 1. Help others understand how to build their own scripts via through commenting within each script.
 1. Create [a cental 'awesome' collection](https://github.com/simpyll/dalis/tree/main/reference) of various arch linux scripts and install guides found around the web.
 
