@@ -42,3 +42,9 @@ mkfs.ext4 /dev/sda2
 
 # mount /dev/sda2 to /mnt
 mount /dev/sda2 /mnt
+
+# install base packages to mnt
+pacstrap /mnt base base-devel linux linux-firmware 
+
+# generate a partition table 
+genfstab -U /mnt > /mnt/etc/fstab
