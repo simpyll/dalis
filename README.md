@@ -45,9 +45,11 @@ There are 5 scripts to choose from:
 1. <b>dalis-luks.sh</b> - Root encrypted
 1. <b>dalis-lvm-luks.sh</b> - Root on a logical volume and encrypted
 
-- Script endpoint means able to log in to terminal without iso. 'Install' does not mean graphical environment.
+Note: Script endpoint is dictated by the ability to log in to terminal without iso. A successful install does not include a graphical environment or any other features.
 
 ## Status 
+
+This is a brand new project and is not currently functioning. 
 
 1. <b>dalis.sh</b> - Broken
 1. <b>dalis-barebones.sh</b> - Broken
@@ -58,11 +60,17 @@ There are 5 scripts to choose from:
 
 ## Download
 
+curl the raw script of your choice to the root terminal of your iso.
+
+Example:
+
 ```
 curl -LO raw.githubusercontent.com/simpyll/dalis/main/dalis.bash
 ```
 
 ## Installation
+
+Example:
 
 ```
 sh dalis.bash
@@ -70,15 +78,16 @@ sh dalis.bash
 
 ## Structure 
 
-- Main Scrpts in project root 
+- Main Scrpts are in project root 
 - /resources is a collection of scripts and guides found around the web (mostly GitHub)
 - /docs is a collection of various notes on specific install topics (i.e. Connecting to the internet or creating locales)
 
 ## Roadmap 
 
-1. Get scripts functioning seamlessly 
+1. Get scripts functioning seamlessly.
 1. Comment each line of code to describe it's function.
+1. Add to and standardize the resource folder.
 
 ## License
 
-MIT
+[MIT](https://github.com/simpyll/dalis/blob/main/LICENSE)
