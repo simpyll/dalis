@@ -79,3 +79,12 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 
 # generate the ramdisks using the presets inside chroot
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
+
+# bootloader: systemd-boot to /boot/
+arch-chroot /mnt /bin/bash -c 'bootctl install'
+
+/boot/loader/entries/arch.conf
+title Arch Linux
+linux /vmlinuz-linux
+initrd /initramfs-linux.img
+options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw
