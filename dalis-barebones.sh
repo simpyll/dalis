@@ -46,7 +46,7 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # install base packages to mnt
-pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager vim sudo
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils vim sudo
 
 # If using grub for bootloader remove the comment on the line below
 # pacstrap /mnt grub dosfstools efibootmgr
