@@ -68,3 +68,6 @@ arch-chroot /mnt /bin/bash -c 'locale-gen'
 
 # set clock inside chroot 
 arch-chroot /mnt /bin/bash -c 'hwclock --systohc --utc'
+
+# set root password inside chroot
+arch-chroot /mnt /bin/bash -c 'passwd'
