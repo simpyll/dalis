@@ -10,6 +10,8 @@ David's Arch Linux Install Scripts
 |
 <b><a href="#features">Features</a></b>
 |
+<b><a href="#status">Status</a></b>
+|
 <b><a href="#download">Download</a></b>
 |
 <b><a href="#installation">Installation</a></b>
@@ -38,6 +40,8 @@ Number 2 is accomplished in 2 key ways:
 
 ## Features 
 
+The key feature that separates these implementations from others is that these are complete scipts. There is no need to type in anything yourself, except for when you create new root and/or user passwords when prompted. 
+
 There are 5 scripts to choose from:
 1. <b>dalis.sh</b> - The standard basic install
 1. <b>dalis-barebones.sh</b> - The absolute minimal install needed
@@ -45,7 +49,16 @@ There are 5 scripts to choose from:
 1. <b>dalis-luks.sh</b> - Root encrypted
 1. <b>dalis-lvm-luks.sh</b> - Root on a logical volume and encrypted
 
-- Script Endpoint means able to log in to terminal without iso. 'Install' does not mean graphical environment.
+- Script endpoint means able to log in to terminal without iso. 'Install' does not mean graphical environment.
+
+## Status 
+
+1. <b>dalis.sh</b> - Broken
+1. <b>dalis-barebones.sh</b> - Broken
+1. <b>dalis-lvm.sh</b> - Broken
+1. <b>dalis-luks.sh</b> - Broken
+1. <b>dalis-lvm-luks.sh</b> - Broken
+
 
 ## Download
 
