@@ -24,7 +24,7 @@
 # Wipe file system and create two new partitions (boot and root).
 sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00 
 
-# Set time
+# Enable NTP and set timezone
 timedatectl set-ntp true
 timedatectl set-timezone America/Chicago
 
