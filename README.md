@@ -45,6 +45,8 @@ There are 5 scripts to choose from:
 1. <b>dalis-luks.sh</b> - Root encrypted
 1. <b>dalis-lvm-luks.sh</b> - Root on a logical volume and encrypted
 
+- Script Endpoint means able to log in to terminal without iso. 'Install' does not mean graphical environment.
+
 ## Download
 
 ```
@@ -59,6 +61,15 @@ sh dalis.bash
 
 ## Structure 
 
-## Roadmap
+- Main Scrpts in project root 
+- /resources is a collection of scripts and guides found around the web (mostly GitHub)
+- /docs is a collection of various notes on specific install topics (i.e. Connecting to the internet or creating locales)
+
+That's it.
+
+## Roadmap 
+
+1. Get scripts functioning seamlessly 
+1. Comment each line of code to describe it's function.
 
 ## License
