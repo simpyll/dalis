@@ -46,7 +46,10 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # install base packages to mnt
-pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager vim sudo
+
+# If using grub for bootloader remove the comment on the line below
+# pacstrap /mnt grub dosfstools efibootmgr
 
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
@@ -74,6 +77,9 @@ arch-chroot /mnt /bin/bash -c 'echo "127.0.0.1 localhost
 ::1 localhost
 127.0.1.1 arch.localdomain arch" >> /etc/hosts'
 
+# set hostname inside chroot
+arch-chroot /mnt /bin/bash -c 'echo "arch" > /etc/hostname'
+
 # set root password inside chroot
 arch-chroot /mnt /bin/bash -c 'passwd'
 
@@ -89,6 +95,12 @@ linux /vmlinuz-linux
 initrd /intel-ucode.img
 initrd /initramfs-linux.img
 options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw" >> /boot/loader/entries/arch.conf'
+
+# If using grub remove comments from the next 4 lines to create a bootable mount point. 
+# arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
+# arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI/'
+# arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --removable --recheck'
+# arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
 # enable networkmanager
 arch-chroot /mnt /bin/bash -c 'systemctl enable NetworkManager'
