@@ -18,17 +18,27 @@
 # iwctl station <stationname> connect <ssid> -P <password>
 #
 # ***USAGE*** 
-# sh ./dalis-barebones.sh
+# curl -LO https://raw.githubusercontent.com/simpyll/dalis/main/dalis-barebones.sh
+# sh dalis-barebones.sh
 
-# Wipe file system and create two new partitions
+# Wipe file system and create two new partitions (boot and root).
 sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00 
 
+# Set time
 timedatectl set-ntp true
 timedatectl set-timezone America/Chicago
 
+# Make sda1 a fat32 partition for boot
 mkfs.fat -F32 /dev/sda1
-mkdir /mnt/boot
+
+# make a boot directory at /mnt/boot
+mkdir /mnt/boot 
+
+# mount sda1 to boot directory
 mount /dev/sda1 /mnt/boot 
 
+# make a ext4 file system for root on sda2
 mkfs.ext4 /dev/sda2
+
+# mount /dev/sda2 to /mnt
 mount /dev/sda2 /mnt
