@@ -49,7 +49,7 @@ mount /dev/sda2 /mnt
 pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils vim sudo
 
 # If using grub for bootloader remove the comment on the line below
-# pacstrap /mnt grub dosfstools efibootmgr
+pacstrap /mnt grub dosfstools efibootmgr
 
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
@@ -90,17 +90,17 @@ arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 arch-chroot /mnt /bin/bash -c 'bootctl install'
 
 # config the bootloader file /boot/loader/entries/arch.conf inside chroot
-arch-chroot /mnt /bin/bash -c 'echo "title Arch Linux
-linux /vmlinuz-linux
-initrd /intel-ucode.img
-initrd /initramfs-linux.img
-options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw" >> /boot/loader/entries/arch.conf'
+# arch-chroot /mnt /bin/bash -c 'echo "title Arch Linux
+# linux /vmlinuz-linux
+# initrd /intel-ucode.img
+# initrd /initramfs-linux.img
+# options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw" >> /boot/loader/entries/arch.conf'
 
 # If using grub comment out the above section and then remove comments from the next 4 lines to create a bootable mount point. 
-# arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
-# arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI/'
-# arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --removable --recheck'
-# arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
+arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
+arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI/'
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --removable --recheck'
+arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
 # enable networkmanager
 arch-chroot /mnt /bin/bash -c 'systemctl enable NetworkManager'
