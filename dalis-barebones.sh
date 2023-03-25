@@ -89,7 +89,7 @@ arch-chroot /mnt /bin/bash -c 'bootctl install'
 # create a bootable mount point. 
 arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
 arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI/'
-arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --removable --recheck'
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --recheck'
 arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
 # There's no need to `exit` because you never entered chroot. Everything was done from the iso.
