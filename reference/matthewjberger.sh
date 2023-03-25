@@ -7,7 +7,6 @@ host_name=$1
 root_password=$2
 user_name=$3
 user_password=$4
-additional_kernel_parameters=$5
 
 # Check for UEFI
 echo "Checking for UEFI..."
@@ -66,38 +65,47 @@ genfstab -U /mnt > /mnt/etc/fstab
 arch-chroot /mnt /bin/bash <<EOF
 # Set the time zone
 echo "Setting time zone..."
-ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
+
 # Setup the hardware clock
 echo "Setting up the hardware clock..."
 hwclock --systohc
+
 # Setup locale
 echo "Setting locale..."
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 export LANG=en_US.UTF-8 
 echo "LANG=en_US.UTF-8" >> /etc/locale.conf
+
 # Create the hostname file
 echo "Setting hostname..."
 echo $host_name > /etc/hostname
+
 echo "Setting up hosts file..."
 cat << CONF > /etc/hosts
 127.0.0.1 localhost
 ::1 localhost
-127.0.1.1 $host_name.localdomain odinsbeard
+127.0.1.1 $host_name.localdomain arch
 CONF
+
 # Create a new initramfs
 echo "Generating initramfs"
 mkinitcpio -p linux
+
 # Setup networking
 echo "Installing wifi packages"
 pacman --noconfirm -S iw wpa_supplicant dialog wpa_actiond
 systemctl enable dhcpcd.service
+
 # Setup a password for the root account
 echo "Setting root password"
 echo "root:${root_password}" | chpasswd
+
 # Install a bootloader
 echo "Installing systemd-boot bootloader..."
 bootctl install
+
 # Configure bootloader
 echo "Setting up loader configuration..."
 cat << CONF > /boot/loader/loader.conf
@@ -105,23 +113,29 @@ default arch
 timeout 4
 editor no
 CONF
+
 echo "Setting up Arch LTS bootloader entry..."
 cat << CONF > /boot/loader/entries/arch.conf
 title          Arch Linux LTS
 linux          /vmlinuz-linux-lts
 initrd         /initramfs-linux-lts.img
-options        root=$(blkid | grep sda2 | cut -f 4 -d ' ' | tr -d '"') rw $additional_kernel_parameters
+options        root=$(blkid | grep sda2 | cut -f 4 -d ' ' | tr -d '"') rw
 CONF
+
 # Install linux lts kernel
 echo "Installing Linux LTS Kernel"
 pacman --noconfirm -S linux-lts linux-lts-headers
+
 # Add a non-root user
 useradd -m -g users -s /bin/bash $user_name
 echo "${user_name}:${user_password}" | chpasswd
+
 # Make the non-root user a sudoer
 echo odin ALL=\(ALL\) NOPASSWD: ALL >> /etc/sudoers
+
 # Do a full system upgrade
 pacman --noconfirm -Syu
+
 # Install an aur helper
 pacman --noconfirm -S git pkgfile
 cd /home/$user_name
@@ -129,26 +143,11 @@ git clone https://aur.archlinux.org/yay.git
 chown $user_name yay
 cd yay
 su $user_name -c "yes | makepkg -sri"
+
 # Install tools
-su $user_name -c "yes | yay --noconfirm -S virtualbox-guest-utils virtualbox-guest-dkms xorg-server xorg-xinit xorg-apps vim emacs evince pulseaudio pulseaudio-alsa alsa-utils pavucontrol pulseaudio-ctl unzip unrar p7zip deluge compton file-roller nitrogen w3m neofetch polybar rofi cava cmatrix bash-pipes ttf-font-awesome ttf-hack adobe-source-code-pro-fonts feh python python2 python-pip python-pywal imagemagick ranger nitrogen networkmanager firefox net-tools fzf hub nerd-fonts-complete gksu xorg-xrandr arandr xtrlock dunst tmux neomutt thunar tumbler visual-studio-code-bin antigen-git siji-git ttf-unifont xorg-xbacklight network-manager-applet neovim python2-neovim python-neovim ruby-neovim bspwm sxhkd termite adobe-source-code-pro-fonts illum networkmanager network-manager-applet stone-soup systemd-boot-pacman-hook zsh lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings bspwm sxhkd dmenu rxvt-unicode arch-firefox-search lynx irssi wget playerctl spotify tmux fpp-git urlview universal-ctags-git"
-# Change shell
-chsh $user_name -s $(which zsh)
-# Install dotfiles
-echo "Installing dotfiles..."
-su $user_name << UserCommands
-mkdir -p /home/$user_name/code
-git clone https://github.com/matthewjberger/dotfiles /home/$user_name/code/dotfiles
-cd /home/$user_name/code/dotfiles
-./install
-source /home/$user_name/.dotfiles/scripts/wallpaper-commands.sh
-set-random-wallpaper
-UserCommands
-netctl stop-all
-yay -Rs netctl
+su $user_name -c "yes | yay --noconfirm -S networkmanager net-tools network-manager-applet systemd-boot-pacman-hook wget"
+
 # Enable services
-systemctl enable vboxservice.service
-systemctl enable lightdm.service
-systemctl enable illum.service
 systemctl enable NetworkManager.service
 EOF
 
