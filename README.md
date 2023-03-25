@@ -49,10 +49,8 @@ Note: Script endpoint is dictated by the ability to log in to terminal without i
 
 ## Status 
 
-This is a brand new project and is not currently functioning. 
-
 1. <b>dalis.sh</b> - Broken
-1. <b>dalis-barebones.sh</b> - Should be working. Needs to be tested.
+1. <b>dalis-barebones.sh</b> - Working
 1. <b>dalis-lvm.sh</b> - Broken
 1. <b>dalis-luks.sh</b> - Broken
 1. <b>dalis-lvm-luks.sh</b> - Broken
