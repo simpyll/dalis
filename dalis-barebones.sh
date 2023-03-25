@@ -31,7 +31,7 @@ timedatectl set-ntp true
 timedatectl set-timezone America/Chicago
 
 # make sda1 a fat32 partition for boot
-mkfs.vfat -F32 /dev/sda1
+mkfs.fat -F32 /dev/sda1
 
 # make a boot directory at /mnt/boot
 mkdir /mnt/boot 
