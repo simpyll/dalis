@@ -46,7 +46,7 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # install base packages to mnt
-pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils grub dosfstools openssh os-prober mtools efibootmgr vim
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils grub dosfstools openssh efibootmgr vim
 
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
