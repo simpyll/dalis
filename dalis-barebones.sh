@@ -31,7 +31,7 @@ timedatectl set-ntp true
 timedatectl set-timezone America/Chicago
 
 # make sda1 a fat32 partition for boot
-mkfs.fat -F32 /dev/sda1
+mkfs.vfat -F32 /dev/sda1
 
 # make a boot directory at /mnt/boot
 mkdir /mnt/boot 
@@ -46,10 +46,7 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # install base packages to mnt
-pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils vim sudo
-
-# If using grub for bootloader remove the comment on the line below
-pacstrap /mnt grub dosfstools efibootmgr
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils grub dosfstools efibootmgr vim
 
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
@@ -89,24 +86,11 @@ arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 # bootloader setup: systemd-boot to /boot/ inside chroot
 arch-chroot /mnt /bin/bash -c 'bootctl install'
 
-# config the bootloader file /boot/loader/entries/arch.conf inside chroot
-# arch-chroot /mnt /bin/bash -c 'echo "title Arch Linux
-# linux /vmlinuz-linux
-# initrd /intel-ucode.img
-# initrd /initramfs-linux.img
-# options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw" >> /boot/loader/entries/arch.conf'
-
-# If using grub comment out the above section and then remove comments from the next 4 lines to create a bootable mount point. 
+# create a bootable mount point. 
 arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
 arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI/'
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --removable --recheck'
 arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
-
-# enable networkmanager
-arch-chroot /mnt /bin/bash -c 'systemctl enable NetworkManager'
-
-# start networkmanager
-arch-chroot /mnt /bin/bash -c 'systemctl start NetworkManager'
 
 # There's no need to `exit` because you never entered chroot. Everything was done from the iso.
 # Now we just unmount the filesystem
