@@ -1,117 +1,99 @@
-# First check the internet connection.
-ping google.com
+#! /bin/bash 
 
-# Sync clocks
+# This is an arch Linux install script that is as minimal as possible.
+# © 2023 David Becker 
+#
+# ***LICENSE*** 
+# License: MIT. See it here: https://raw.githubusercontent.com/simpyll/dalis/main/LICENSE
+# 
+# ***IMPORTANT*** 
+# This script assumes you are connected to the internet. 
+# You can do so directly by using an ethernet cable (It is automatic. No scripting or other input needed.) 
+#
+# Or by using wifi via iwctl. Example: 
+#
+# iwctl device list
+# iwctl station <stationname> scan
+# iwctl station <stationname> get-networks
+# iwctl station <stationname> connect <ssid> -P <password>
+#
+# ***USAGE*** 
+# curl -LO https://raw.githubusercontent.com/simpyll/dalis/main/dalis-barebones.sh
+# sh dalis-barebones.sh
+
+# wipe file system and create two new partitions (boot and root).
+sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00 
+
+# enable NTP
 timedatectl set-ntp true
 
-# Create disk partitions using GPT.
-# - /boot (EFI system partition)
-# - SWAP (Linux swap)
-# - /mnt (linux root x86-64)
-cfdisk
+# set timezone
+timedatectl set-timezone America/Chicago
 
-# Format the newly made partitions.
-# This command assumes that the partitions were made in the exact order above.
-# You'll have to figure it out yourself.
-mkfs.btrfs /dev/sda3
-mkswap /dev/sda2
-
-# Mount the file system.
-mount /dev/sda3 /mnt
-
-# Mount the swap partition.
-swapon /dev/sda2
-
-# Pacstrap the essentials.
-# This installs the kernel and a few other essential packages
-pacstrap /mnt base base-devel linux linux-firmware vim sudo grub dosfstools efibootmgr
-
-# Generate fstab file.
-genfstab -U /mnt >> /mnt/etc/fstab
-
-# INSTALLATION PROCESS
-
-# Change root into the new system.
-# At this point, you are now configuring the system.
-arch-chroot /mnt
-
-# Install network management software.
-pacman -Syu networkmanager
-systemctl enable --now NetworkManager
-
-# Install microcode packages.
-# ONLY RUN THE RELEVANT COMMAND FOR CPU.
-pacman -Syu intel-ucode
-
-# Change timezone accordingly.
-ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
-hwclock --systohc
-
-# Edit locale-gen for the relevant timezone.
-vim /etc/locale.gen
-locale-gen
-
-# Create a file for language.
-# Add in LANG=en_US.UTF-8
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
-
-# Create the hostname.
-# Add in whatever hostname you want in there.
-echo "arch" > /etc/hostname
-
-# Set new root password.
-passwd
-
-# Creat a bootable mount point.
+# make sda1 a fat32 partition for boot
 mkfs.fat -F32 /dev/sda1
-mkdir /boot/EFI
-mount /dev/sda1 /boot/EFI/
 
-# Select boot loaders.
-grub-install --target=x86_64-efi --bootloader-id=GRUB --removable --recheck
-grub-mkconfig -o /boot/grub/grub.cfg
+# make a boot directory at /mnt/boot
+mkdir /mnt/boot 
 
-# Exit the chroot environment.
-exit
+# mount sda1 to boot directory
+mount /dev/sda1 /mnt/boot 
+
+# make a ext4 file system for root on sda2
+mkfs.ext4 /dev/sda2
+
+# mount /dev/sda2 to /mnt
+mount /dev/sda2 /mnt
+
+# install base packages to mnt
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils grub dosfstools openssh efibootmgr vim
+
+# generate a partition table 
+genfstab -U /mnt > /mnt/etc/fstab
+
+# set locale inside chroot 
+arch-chroot /mnt /bin/bash -c 'echo "en_US.UTF-8" > /etc/locale.gen'
+
+# set keymap inside chroot 
+arch-chroot /mnt /bin/bash -c 'echo "KEYMAP=us" > /etc/vconsole.conf'
+
+# set language inside chroot 
+arch-chroot /mnt /bin/bash -c 'echo "LANG=en_US.UTF-8" > /etc/locale.conf'
+
+# set timezone inside chroot 
+arch-chroot /mnt /bin/bash -c 'ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime'
+
+# set generate localisation from templates inside chroot 
+arch-chroot /mnt /bin/bash -c 'locale-gen'
+
+# set clock inside chroot 
+arch-chroot /mnt /bin/bash -c 'hwclock --systohc --utc'
+
+# Set the hosts file inside chroot
+arch-chroot /mnt /bin/bash -c 'echo "127.0.0.1 localhost
+::1 localhost
+127.0.1.1 arch.localdomain arch" >> /etc/hosts'
+
+# set hostname inside chroot
+arch-chroot /mnt /bin/bash -c 'echo "arch" > /etc/hostname'
+
+# set root password inside chroot
+arch-chroot /mnt /bin/bash -c 'passwd'
+
+# generate the ramdisks using the presets inside chroot
+arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
+
+# bootloader setup: systemd-boot to /boot/ inside chroot
+arch-chroot /mnt /bin/bash -c 'bootctl install'
+
+# create a bootable mount point. 
+arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
+arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI/'
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --recheck'
+arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
+
+# There's no need to `exit` because you never entered chroot. Everything was done from the iso.
+# Now we just unmount the filesystem
 umount -R /mnt
-reboot
 
-
-# POST INSTALL
-
-# Add user and enable as sudoer.
-# When in the sudoersfile, add the folling:
-#  brian ALL=(ALL) ALL
-# Log back in under david after this.
-useradd -m david
-passwd david
-vim /etc/sudoers
-exit
-
-# Activate multilib repositories.
-#   Uncomment the [multilib] section
-sudo vim /etc/pacman.conf
-
-# Install DEs and related tools.
-# This is just GNOME, but pretty much anything ought to fit.
-# After this point, the machine will boot into the DE.
-sudo pacman -Syu xorg xorg-server xorg-server-xwayland
-sudo pacman -Syu gnome
-sudo systemctl enable --now gdm.service
-
-# Install yay package management tool.
-sudo pacman -Syu git openssh
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-
-# Install web browsers.
-sudo pacman -Syu firefox chromium neofetch gnome-tweaks
-
-# Remove some unwanted icons/packages.
-sudo pacman -Rcns epiphany
-sudo rm /usr/share/applications/avahi-discover.desktop
-sudo rm /usr/share/applications/bsssh.desktop
-sudo rm /usr/share/applications/bvnc.desktop
-sudo rm /usr/share/applications/qv4l2.desktop
-sudo rm /usr/share/applications/qvidcap.desktop
+# all you need to do now is `poweroff` or `restart`. I prefer to poweroff so I can remove the usb without concern before booting back on.
