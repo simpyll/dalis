@@ -46,7 +46,7 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # install base packages to mnt
-pacstrap /mnt base base-devel linux linux-firmware intel-ucode vim
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode vim openssh
 
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
@@ -81,7 +81,7 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
 # bootloader
-arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr networkmanager sudo xorg gnome'
+arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr networkmanager network-manager-applet dhcpcd sudo xorg gnome'
 arch-chroot /mnt /bin/bash -c 'mount /dev/sda2 /boot'
 arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot'
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot'
@@ -92,9 +92,11 @@ arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 # usermod -aG wheel,audio,video, storage david
 
 # uncomment wheel in visudo
-# visudo
+# vim visudo
 
-# systemctl enable gdm.service
+# systemctl enable gdm.service 
+# systemctl enable sshd
+# systemctl enable dhcpcd
 # systemctl enable NetworkManager.service
 
 # Now we just unmount the filesystem
