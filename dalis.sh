@@ -46,8 +46,8 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # Get available mirrors for the US, and then use rankmirrors to sort them
-echo "Updating mirrorlist..."
-curl -s "https://www.archlinux.org/mirrorlist/?country=US&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
+# echo "Updating mirrorlist..."
+# curl -s "https://www.archlinux.org/mirrorlist/?country=US&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
 
 # install base packages to mnt
 pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils grub dosfstools openssh efibootmgr vim
