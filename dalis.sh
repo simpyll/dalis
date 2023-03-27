@@ -81,23 +81,33 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
 # bootloader
-arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr networkmanager network-manager-applet dhcpcd sudo xorg gnome'
+arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr sudo '
 arch-chroot /mnt /bin/bash -c 'mount /dev/sda2 /boot'
 arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot'
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot'
 arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
 # useradd -m david
-# passwd David 
-# usermod -aG wheel,audio,video, storage david
+# passwd david 
+# usermod -aG wheel,audio,video,storage david
 
 # uncomment wheel in visudo
-# vim visudo
+# vim visual 
 
-# systemctl enable gdm.service 
+# pacman -S xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg
+# pacman -S i3-gaps i3blocks i3lock numlockx
+
+# pacman -S networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog
 # systemctl enable sshd
 # systemctl enable dhcpcd
 # systemctl enable NetworkManager.service
+
+# Improve laptop battery consumption
+# pacman -S tlp tlp-rdw powertop acpi
+# systemctl enable tlp
+# systemctl enable tlp-sleep
+# systemctl mask systemd-rfkill.service
+# systemctl mask systemd-rfkill.socket
 
 # Now we just unmount the filesystem
 # umount -l /mnt
