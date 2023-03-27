@@ -46,7 +46,7 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # install base packages to mnt
-pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils vim sudo
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode vim
 
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
@@ -80,9 +80,10 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 # generate the ramdisks using the presets inside chroot
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
-arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr' 
-mkdir /boot/EFI 
-bootctl install --esp-path /boot/EFI
+# bootloader
+arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr networkmanager dhcpcd iwd inetutils iputils sudo' 
+arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
+arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot/EFI'
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/EFI'
 arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
