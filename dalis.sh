@@ -80,8 +80,10 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 # generate the ramdisks using the presets inside chroot
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
-arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr'
-arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot'
+arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr' 
+mkdir /boot/EFI 
+bootctl install --esp-path /boot/EFI
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/EFI'
 arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
 # Now we just unmount the filesystem
