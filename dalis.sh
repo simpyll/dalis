@@ -81,7 +81,7 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
 # bootloader
-arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr networkmanager dhcpcd iwd inetutils iputils sudo xorg gnome'
+arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr networkmanager sudo xorg gnome'
 arch-chroot /mnt /bin/bash -c 'mount /dev/sda2 /boot'
 arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot'
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot'
@@ -98,6 +98,6 @@ arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 # systemctl enable NetworkManager.service
 
 # Now we just unmount the filesystem
-umount -R /mnt
+# umount -l /mnt
 
 # all you need to do now is `poweroff` or `restart`. I prefer to poweroff so I can remove the usb without concern before booting back on.
