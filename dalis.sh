@@ -88,7 +88,7 @@ arch-chroot /mnt /bin/bash -c 'echo "en_US.UTF-8" > /etc/locale.gen'
 arch-chroot /mnt /bin/bash -c 'echo "KEYMAP=us" > /etc/vconsole.conf'
 
 # set language inside chroot 
-arch-chroot /mnt /bin/bash -c 'echo "LANG=en_US.UTF-8" > /etc/locale.conf'
+arch-chroot /mnt /bin/bash -c 'echo "en_US.UTF-8 UTF-8" > /etc/locale.gen'
 
 # set timezone inside chroot 
 arch-chroot /mnt /bin/bash -c 'ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime'
