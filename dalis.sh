@@ -83,17 +83,32 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 # generate the ramdisks using the presets inside chroot
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
-# bootloader setup: systemd-boot to /boot/ inside chroot
-arch-chroot /mnt /bin/bash -c 'bootctl install'
+# Install a bootloader
+bootctl install
+
+# Configure bootloader
+cat << CONF > /boot/loader/loader.conf
+default arch
+timeout 4
+editor no
+CONF
+cat << CONF > /boot/loader/entries/arch.conf
+title          Arch Linux
+linux          /vmlinuz-linux
+initrd         /intel-ucode.img
+initrd         /initramfs-linux.img
+options        root=$(blkid | grep sda2 | cut -f 4 -d ' ' | tr -d '"') rw
+CONF
+
 
 # create a bootable mount point. 
-arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
-arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI/'
-arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --recheck'
-arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
+# arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
+# arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI/'
+# arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --recheck'
+# arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
-# There's no need to `exit` because you never entered chroot. Everything was done from the iso.
 # Now we just unmount the filesystem
+
 umount -R /mnt
 
 # all you need to do now is `poweroff` or `restart`. I prefer to poweroff so I can remove the usb without concern before booting back on.
