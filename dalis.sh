@@ -22,7 +22,7 @@
 # sh dalis-barebones.sh
 
 # wipe file system and create two new partitions (boot and root).
-sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00 
+# sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00 
 
 # enable NTP
 timedatectl set-ntp true
@@ -31,19 +31,49 @@ timedatectl set-ntp true
 timedatectl set-timezone America/Chicago
 
 # make sda1 a fat32 partition for boot
-mkfs.fat -F32 /dev/sda1
+# mkfs.fat -F32 /dev/sda1
 
 # make a boot directory at /mnt/boot
-mkdir /mnt/boot 
+# mkdir /mnt/boot 
 
 # mount sda1 to boot directory
-mount /dev/sda1 /mnt/boot 
+# mount /dev/sda1 /mnt/boot 
 
 # make a ext4 file system for root on sda2
-mkfs.ext4 /dev/sda2
+# mkfs.ext4 /dev/sda2
 
 # mount /dev/sda2 to /mnt
+# mount /dev/sda2 /mnt
+
+# Zap disk
+echo "Zapping disk..."
+sgdisk --zap-all /dev/sda
+
+# Set 1 ESP partition and 1 primary ext4 partition
+parted /dev/sda -s mklabel gpt
+echo "Creating /dev/sda1..."
+parted /dev/sda -s mkpart ESP fat32 1MiB 551MiB
+parted /dev/sda -s set 1 esp on
+echo "Creating /dev/sda2..."
+parted /dev/sda -s mkpart primary ext4 551MiB 100%
+
+# Format the ESP partition as fat32
+echo "Formatting the ESP partition as fat32..."
+yes | mkfs.fat -F32 /dev/sda1
+
+# Format the primary partition as ext4
+echo "Formatting the primary partition as ext4..."
+yes | mkfs.ext4 /dev/sda2
+
+# Mount the partitions
+echo "Mounting partitions..."
 mount /dev/sda2 /mnt
+mkdir -p /mnt/boot
+mount /dev/sda1 /mnt/boot
+
+# Get available mirrors for the US, and then use rankmirrors to sort them
+echo "Updating mirrorlist..."
+curl -s "https://www.archlinux.org/mirrorlist/?country=US&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
 
 # install base packages to mnt
 pacstrap /mnt base base-devel linux linux-firmware intel-ucode networkmanager dhcpcd iwd inetutils iputils grub dosfstools openssh efibootmgr vim
