@@ -81,15 +81,16 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
 # bootloader
-arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr sudo '
-arch-chroot /mnt /bin/bash -c 'mount /dev/sda2 /boot'
+arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr sudo' 
+arch-chroot /mnt /bin/bash -c 'mkfs.fat -F32 /dev/sda1'
+arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /mnt/boot' 
 arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot'
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot'
 arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
-# useradd -m david
-# passwd david 
-# usermod -aG wheel,audio,video,storage david
+arch-chroot /mnt /bin/bash -c 'useradd -m david'
+arch-chroot /mnt /bin/bash -c 'passwd david'
+arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
 
 # uncomment wheel in visudo
 # vim visual 
