@@ -93,10 +93,10 @@ arch-chroot /mnt /bin/bash -c 'passwd david'
 arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
 
 # uncomment wheel in visudo
-# vim visual 
+# vim visudo
 
 # pacman -S xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg
-# pacman -S i3-gaps i3blocks i3lock numlockx
+# pacman -S i3 i3-gaps i3blocks i3lock numlockx
 
 # pacman -S networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog
 # systemctl enable sshd
