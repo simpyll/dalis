@@ -32,4 +32,6 @@ pacman -S --noconfirm tlp tlp-rdw powertop acpi
 systemctl enable tlp 
 systemctl enable tlp-sleep
 systemctl mask systemd-rfkill.service
-systemctl mask systemd-rfkill.socket
+systemctl mask systemd-rfkill.socket 
+
+
