@@ -77,9 +77,6 @@ arch-chroot /mnt /bin/bash -c 'echo "arch" > /etc/hostname'
 # set root password inside chroot
 arch-chroot /mnt /bin/bash -c 'passwd'
 
-# generate the ramdisks using the presets inside chroot
-arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
-
 arch-chroot /mnt /bin/bash -c 'useradd -m david'
 arch-chroot /mnt /bin/bash -c 'passwd david'
 arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
@@ -87,8 +84,8 @@ arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
 # uncomment wheel in visudo
 # vim visudo
 
-arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg sudo'
-arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm i3 i3-gaps i3blocks i3lock numlockx'
+# arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg sudo'
+# arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm i3 i3-gaps i3blocks i3lock numlockx'
 
 arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog openssh'
 arch-chroot /mnt /bin/bash -c 'systemctl enable sshd'
@@ -104,25 +101,29 @@ arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.socket'
 
 # bootloader
 # Install a bootloader
-echo "Installing systemd-boot bootloader..."
-arch-chroot /mnt /bin/bash -c 'bootctl install'
+# echo "Installing systemd-boot bootloader..."
+# arch-chroot /mnt /bin/bash -c 'bootctl install'
 
 # Configure bootloader
-echo "Setting up loader configuration..."
-arch-chroot /mnt /bin/bash -c 'cat << CONF > /boot/loader/loader.conf
-default arch
-timeout 4
-editor no
-CONF'
+# echo "Setting up loader configuration..."
+# arch-chroot /mnt /bin/bash -c 'cat << CONF > /boot/loader/loader.conf
+# default arch
+# timeout 4
+# editor no
+# CONF'
 
-echo "Setting up Arch LTS bootloader entry..."
-arch-chroot /mnt /bin/bash -c 'cat << CONF > /boot/loader/entries/arch.conf
-title          Arch Linux LTS
-linux          /vmlinuz-linux-lts
-initrd         /initramfs-linux-lts.img
-options        root=$(blkid | grep sda2 | cut -f 4 -d ' ' | tr -d '"') rw
-CONF'
+# echo "Setting up Arch LTS bootloader entry..."
+# arch-chroot /mnt /bin/bash -c 'cat << CONF > /boot/loader/entries/arch.conf
+# title          Arch Linux
+# linux          /vmlinuz-linux
+# initrd         /intel-ucode.img
+# initrd         /initramfs-linux.img
+# options        root=$(blkid | grep sda2 | cut -f 2 -d ' ' | tr -d '"') rw
+# CONF'
 
 # Install linux lts kernel
-echo "Installing Linux LTS Kernel"
-arch-chroot /mnt /bin/bash -c 'pacman --noconfirm -S linux-lts linux-lts-headers'
+# echo "Installing Linux LTS Kernel"
+# arch-chroot /mnt /bin/bash -c 'pacman --noconfirm -S linux-lts linux-lts-headers'
+
+# generate the ramdisks using the presets inside chroot
+# arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
