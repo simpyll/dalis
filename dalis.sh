@@ -96,20 +96,20 @@ arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
 # uncomment wheel in visudo
 # vim visudo
 
-# pacman -S xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg
-# pacman -S i3 i3-gaps i3blocks i3lock numlockx
+arch-chroot /mnt /bin/bash -c 'pacman -S xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg'
+arch-chroot /mnt /bin/bash -c 'pacman -S i3 i3-gaps i3blocks i3lock numlockx'
 
-pacman -S networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog openssh
-systemctl enable sshd
-systemctl enable dhcpcd
-systemctl enable NetworkManager.service
+arch-chroot /mnt /bin/bash -c 'pacman -S networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog openssh'
+arch-chroot /mnt /bin/bash -c 'systemctl enable sshd'
+arch-chroot /mnt /bin/bash -c 'systemctl enable dhcpcd'
+arch-chroot /mnt /bin/bash -c 'systemctl enable NetworkManager.service'
 
 # Improve laptop battery consumption
-pacman -S tlp tlp-rdw powertop acpi
-systemctl enable tlp
-systemctl enable tlp-sleep
-systemctl mask systemd-rfkill.service
-systemctl mask systemd-rfkill.socket
+arch-chroot /mnt /bin/bash -c 'pacman -S tlp tlp-rdw powertop acpi'
+arch-chroot /mnt /bin/bash -c 'systemctl enable tlp'
+arch-chroot /mnt /bin/bash -c 'systemctl enable tlp-sleep'
+arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.service'
+arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.socket'
 
 # Now we just unmount the filesystem
 # umount -l /mnt
