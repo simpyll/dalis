@@ -1,0 +1,143 @@
+Update the system clock
+Use timedatectl(1) to ensure the system clock is accurate:
+# timedatectl set-ntp true
+To check the service status, use timedatectl status.
+
+Partitioning
+bash> fdisk /dev/sda
+fdisk> g
+Created a new GPT disklabel (GUID: ABC02D92-4420-4998-A39B-B39257341D68).
+fdisk> n
+Partition number (1-128, default 1): 1
+First sector (2048-500118158, default 2048): 
+Last sector, +sectors or +size{K,M,G,T,P} (2048-500118158, default 500118158): +512M
+Created a new partition 1 of type 'Linux filesystem' and of size 512 MiB.
+fdisk> t
+Selected partition 1 Hex code (type L to list all codes): 1 
+Changed type of partition 'Linux filesystem' to 'EFI System'. 
+fdisk> w
+fdisk> q
+bash> mkfs.fat -F32 -nEFI /dev/sda1 
+bash> mkfs.ext4 -LROOT /dev/sda2
+
+Mount the file systems
+Mount the file system on the root partition to /mnt, for example:
+# mount /dev/sda1 /mnt
+Create mount points for any remaining partitions and mount them accordingly, for example:
+# mkdir /mnt/boot
+# mount /dev/sda2 /mnt/boot
+
+Install the base packages
+Use the pacstrap script to install the base package group:
+# pacstrap /mnt base
+
+Fstab
+Generate an fstab file (use -U or -L to define by UUID or labels, respectively):
+# genfstab -U /mnt >> /mnt/etc/fstab
+
+Chroot
+Change root into the new system:
+# arch-chroot /mnt
+
+Time zone
+Set the time zone:
+# ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+Run hwclock(8) to generate /etc/adjtime:
+# hwclock --systohc
+
+Locale
+Uncomment en_US.UTF-8 UTF-8 and other needed localizations in /etc/locale.gen, and generate them with:
+# locale-gen
+Set the LANG variable in locale.conf(5) accordingly, for example:
+/etc/locale.conf
+LANG=en_US.UTF-8
+
+Hostname
+Create the hostname(5) file:
+/etc/hostname
+myhostname
+Consider adding a matching entry to hosts(5):
+/etc/hosts
+127.0.0.1	localhost.localdomain	localhost
+::1		localhost.localdomain	localhost
+127.0.1.1	myhostname.localdomain	myhostname
+See also Network configuration#Set the hostname.
+
+Edit /etc/mkinitcpio.conf:
+
+Add crc32c (or crc32c-intel for Intel machines) to the MODULES array
+MODULES="crc32c"
+Generate initramfs:
+# mkinitcpio -p linux
+
+Root password
+Set the root password:
+# passwd
+
+install the intel-ucode package in addition, and enable microcode updates.
+# pacman -S intel-ucode
+# bootctl install
+
+Basic configuration
+The basic configuration is stored in esp/loader/loader.conf file and it is composed by three options:
+default – default entry to select (without the .conf suffix); can be a wildcard like arch-*.
+timeout – menu timeout in seconds. If this is not set, the menu will only be shown on key press during boot.
+editor – whether to enable the kernel parameters editor or not. 1 (default) is enabled, 0 is disabled; since the user can add init=/bin/bash to bypass root password and gain root access, it is strongly recommended to set this option to 0.
+/boot/loader/loader.conf
+default  arch
+timeout  4
+editor   0
+
+systemd-boot
+/boot/loader/entries/arch.conf:
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /intel-ucode.img
+initrd  /initramfs-linux.img
+options root=/dev/sda2 rw
+
+Reboot
+
+Exit the chroot environment by typing exit or pressing Ctrl+D.
+Optionally manually unmount all the partitions with umount -R /mnt: this allows noticing any "busy" partitions, and finding the cause with fuser(1).
+Finally, restart the machine by typing reboot: any partitions still mounted will be automatically unmounted by systemd. Remember to remove the installation media and then login into the new system with the root account.
+
+POST INSTALL
+Wired connection
+If you are using wired connection (ethernet), enable dhcpcd service. Find the name of the Ethernet device with ‘ip link’ command:
+# ip link
+Run the following commands one by one, the first one starts the dhcp service and the second one sets it to start at system boot.
+# systemctl start dhcpcd@enp0s25.service
+# systemctl enable dhcpcd@enp0s25.service
+
+pacman -S zsh sudo
+useradd -m -G wheel -s /usr/bin/zsh diego
+visudo and find this line: # %wheel ALL=(ALL) ALL and delete # character
+chsh -s /usr/bin/zsh (for root)
+passwd diego
+
+Install X-server and graphics drivers
+# pacman -S xorg-server xorg-server-utils xorg-xinit
+Intel GPU:
+# pacman -S xf86-video-intel
+ touch-pad:
+# pacman -S xf86-input-synaptics
+
+i3
+# pacman -S i3 dmenu
+$ cp /etc/X11/xinit/xinitrc ~/.xinitrc
+vim ~/.xinitrc to this:
+#! /bin/bash
+exec i3
+
+/etc/X11/xorg.conf.d/10-monitor.conf
+Section "Monitor"
+    Identifier  "eDP1"
+    Option      "PreferredMode" "2560x1440"
+EndSection
+
+Section "Monitor"
+    Identifier  "HDMI1"
+    Option      "PreferredMode" "1920x1080"
+    Option      "Above" "eDP1"
+EndSection
