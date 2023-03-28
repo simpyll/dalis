@@ -80,15 +80,6 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 # generate the ramdisks using the presets inside chroot
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
-# bootloader
-arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm grub efibootmgr sudo' 
-# arch-chroot /mnt /bin/bash -c 'mkfs.fat -F32 /dev/sda1'
-arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
-arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI' 
-arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot/EFI'
-arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/EFI'
-arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
-
 arch-chroot /mnt /bin/bash -c 'useradd -m david'
 arch-chroot /mnt /bin/bash -c 'passwd david'
 arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
@@ -107,9 +98,18 @@ arch-chroot /mnt /bin/bash -c 'systemctl enable NetworkManager.service'
 # Improve laptop battery consumption
 arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm tlp tlp-rdw powertop acpi'
 arch-chroot /mnt /bin/bash -c 'systemctl enable tlp'
-arch-chroot /mnt /bin/bash -c 'systemctl enable tlp-sleep'
+# arch-chroot /mnt /bin/bash -c 'systemctl enable tlp-sleep'
 arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.service'
 arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.socket'
+
+# bootloader
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm grub efibootmgr sudo' 
+# arch-chroot /mnt /bin/bash -c 'mkfs.fat -F32 /dev/sda1'
+# arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
+# arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI' 
+# arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot/EFI'
+# arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/EFI'
+# arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
 # Now we just unmount the filesystem
 # umount -l /mnt
