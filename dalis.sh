@@ -46,7 +46,7 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # install base packages to mnt
-pacstrap /mnt base base-devel linux linux-firmware intel-ucode vim openssh
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode vim
 
 # generate a partition table 
 genfstab -U /mnt > /mnt/etc/fstab
@@ -83,9 +83,10 @@ arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 # bootloader
 arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr sudo' 
 arch-chroot /mnt /bin/bash -c 'mkfs.fat -F32 /dev/sda1'
-arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /mnt/boot' 
-arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot'
-arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot'
+arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
+arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI' 
+arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot/EFI'
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/EFI'
 arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
 arch-chroot /mnt /bin/bash -c 'useradd -m david'
@@ -95,20 +96,20 @@ arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
 # uncomment wheel in visudo
 # vim visudo
 
-# pacman -S xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg
-# pacman -S i3 i3-gaps i3blocks i3lock numlockx
+pacman -S xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg
+pacman -S i3 i3-gaps i3blocks i3lock numlockx
 
-# pacman -S networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog
-# systemctl enable sshd
-# systemctl enable dhcpcd
-# systemctl enable NetworkManager.service
+pacman -S networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog openssh
+systemctl enable sshd
+systemctl enable dhcpcd
+systemctl enable NetworkManager.service
 
 # Improve laptop battery consumption
-# pacman -S tlp tlp-rdw powertop acpi
-# systemctl enable tlp
-# systemctl enable tlp-sleep
-# systemctl mask systemd-rfkill.service
-# systemctl mask systemd-rfkill.socket
+pacman -S tlp tlp-rdw powertop acpi
+systemctl enable tlp
+systemctl enable tlp-sleep
+systemctl mask systemd-rfkill.service
+systemctl mask systemd-rfkill.socket
 
 # Now we just unmount the filesystem
 # umount -l /mnt
