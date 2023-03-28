@@ -10,6 +10,6 @@ mount /dev/sda1 /mnt/boot
 mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
-pacstrap /mnt base base-devel linux linux-firmware intel-ucode openssh vim
+pacstrap /mnt base base-devel linux linux-firmware intel-ucode openssh wget vim
 
 genfstab -U /mnt > /mnt/etc/fstab
