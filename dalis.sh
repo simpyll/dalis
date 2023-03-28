@@ -81,7 +81,7 @@ arch-chroot /mnt /bin/bash -c 'passwd'
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
 # bootloader
-arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr sudo' 
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm grub efibootmgr sudo' 
 # arch-chroot /mnt /bin/bash -c 'mkfs.fat -F32 /dev/sda1'
 arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
 # arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot' 
@@ -96,16 +96,16 @@ arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
 # uncomment wheel in visudo
 # vim visudo
 
-arch-chroot /mnt /bin/bash -c 'pacman -S xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg'
-arch-chroot /mnt /bin/bash -c 'pacman -S i3 i3-gaps i3blocks i3lock numlockx'
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg'
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm i3 i3-gaps i3blocks i3lock numlockx'
 
-arch-chroot /mnt /bin/bash -c 'pacman -S networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog openssh'
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog openssh'
 arch-chroot /mnt /bin/bash -c 'systemctl enable sshd'
 arch-chroot /mnt /bin/bash -c 'systemctl enable dhcpcd'
 arch-chroot /mnt /bin/bash -c 'systemctl enable NetworkManager.service'
 
 # Improve laptop battery consumption
-arch-chroot /mnt /bin/bash -c 'pacman -S tlp tlp-rdw powertop acpi'
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm tlp tlp-rdw powertop acpi'
 arch-chroot /mnt /bin/bash -c 'systemctl enable tlp'
 arch-chroot /mnt /bin/bash -c 'systemctl enable tlp-sleep'
 arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.service'
