@@ -87,7 +87,7 @@ arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
 # uncomment wheel in visudo
 # vim visudo
 
-arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg'
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg sudo'
 arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm i3 i3-gaps i3blocks i3lock numlockx'
 
 arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog openssh'
@@ -103,11 +103,11 @@ arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.service'
 arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.socket'
 
 # bootloader
-arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm grub efibootmgr sudo' 
+# arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm grub efibootmgr sudo' 
 # arch-chroot /mnt /bin/bash -c 'mkfs.fat -F32 /dev/sda1'
 # arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
 # arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI' 
-# arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot/EFI'
+# arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot'
 # arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/EFI'
 # arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
@@ -115,3 +115,8 @@ arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm grub efibootmgr sudo'
 # umount -l /mnt
 
 # all you need to do now is `poweroff` or `restart`. I prefer to poweroff so I can remove the usb without concern before booting back on.
+
+# mkdir /efi 
+# mount /dev/sda1 /efi 
+# bootctl --esp-path=/efi install
+# mount --bind esp/EFI/arch /boot
