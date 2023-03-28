@@ -82,11 +82,11 @@ arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
 # bootloader
 arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr sudo' 
-arch-chroot /mnt /bin/bash -c 'mkfs.fat -F32 /dev/sda1'
-arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
-arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI' 
-arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot/EFI'
-arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/EFI'
+# arch-chroot /mnt /bin/bash -c 'mkfs.fat -F32 /dev/sda1'
+# arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
+arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot' 
+arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot'
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot'
 arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 
 arch-chroot /mnt /bin/bash -c 'useradd -m david'
@@ -96,8 +96,8 @@ arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
 # uncomment wheel in visudo
 # vim visudo
 
-pacman -S xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg
-pacman -S i3 i3-gaps i3blocks i3lock numlockx
+# pacman -S xorg-server xorg-apps xorg-xinit xdg-user-dirs xorg
+# pacman -S i3 i3-gaps i3blocks i3lock numlockx
 
 pacman -S networkmanager network-manager-applet dhcpcd iw wpa_supplicant dialog openssh
 systemctl enable sshd
