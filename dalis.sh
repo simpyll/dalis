@@ -103,20 +103,26 @@ arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.service'
 arch-chroot /mnt /bin/bash -c 'systemctl mask systemd-rfkill.socket'
 
 # bootloader
-# arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm grub efibootmgr sudo' 
-# arch-chroot /mnt /bin/bash -c 'mkfs.fat -F32 /dev/sda1'
-# arch-chroot /mnt /bin/bash -c 'mkdir /boot/EFI'
-# arch-chroot /mnt /bin/bash -c 'mount /dev/sda1 /boot/EFI' 
-# arch-chroot /mnt /bin/bash -c 'bootctl install --esp-path /boot'
-# arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/EFI'
-# arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
+# Install a bootloader
+echo "Installing systemd-boot bootloader..."
+arch-chroot /mnt /bin/bash -c 'bootctl install'
 
-# Now we just unmount the filesystem
-# umount -l /mnt
+# Configure bootloader
+echo "Setting up loader configuration..."
+arch-chroot /mnt /bin/bash -c 'cat << CONF > /boot/loader/loader.conf
+default arch
+timeout 4
+editor no
+CONF'
 
-# all you need to do now is `poweroff` or `restart`. I prefer to poweroff so I can remove the usb without concern before booting back on.
+echo "Setting up Arch LTS bootloader entry..."
+arch-chroot /mnt /bin/bash -c 'cat << CONF > /boot/loader/entries/arch.conf
+title          Arch Linux LTS
+linux          /vmlinuz-linux-lts
+initrd         /initramfs-linux-lts.img
+options        root=$(blkid | grep sda2 | cut -f 4 -d ' ' | tr -d '"') rw
+CONF'
 
-# mkdir /efi 
-# mount /dev/sda1 /efi 
-# bootctl --esp-path=/efi install
-# mount --bind esp/EFI/arch /boot
+# Install linux lts kernel
+echo "Installing Linux LTS Kernel"
+arch-chroot /mnt /bin/bash -c 'pacman --noconfirm -S linux-lts linux-lts-headers'
