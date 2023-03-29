@@ -46,7 +46,7 @@ arch-chroot /mnt /bin/bash -c 'hostnamectl set-hostname archlinux'
 arch-chroot /mnt /bin/bash -c 'useradd -m david'
 arch-chroot /mnt /bin/bash -c 'passwd david'
 arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
-arch-chroot /mnt /bin/bash -c 'perl -i -pe 's/# (%wheel ALL=\(ALL\) ALL)/$1/' /etc/sudoers'
+arch-chroot /mnt /bin/bash -c "perl -i -pe 's/# (%wheel ALL=\(ALL\) ALL)/$1/' /etc/sudoers"
 
 umount -R /mnt 
 poweroff
