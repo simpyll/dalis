@@ -9,7 +9,7 @@ mount /dev/sda2 /mnt
 mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 
-pacstrap -i /mnt base base-devel Linux linux-headers intel-ucode vim
+pacstrap -i /mnt base base-devel linux linux-headers intel-ucode vim
 
 genfstab -p /mnt >> /mnt/etc/fstab
 
