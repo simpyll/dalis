@@ -39,7 +39,7 @@ arch-chroot /mnt /bin/bash -c 'locale-gen'
 arch-chroot /mnt /bin/bash -c 'hwclock --systohc --utc'
 arch-chroot /mnt /bin/bash -c 'echo "127.0.0.1 localhost
 ::1 localhost
-127.0.1.1 arch.localdomain arch" >> /etc/hosts'
+127.0.1.1 archlinux.localdomain archlinux" >> /etc/hosts'
 arch-chroot /mnt /bin/bash -c 'echo "archlinux" > /etc/hostname'
 arch-chroot /mnt /bin/bash -c 'hostnamectl set-hostname archlinux'
 
