@@ -13,8 +13,6 @@ pacstrap /mnt base base-devel linux linux-headers intel-ucode vim
 
 genfstab -p /mnt >> /mnt/etc/fstab
 
-arch-chroot /mnt /bin/bash
-
 mkinitcpio -p Linux 
 
 arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm netctl dialog dhcpcd iw wpa_supplicant networkmanager network-manager-applet'
