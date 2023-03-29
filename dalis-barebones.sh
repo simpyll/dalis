@@ -2,7 +2,7 @@
 
 sgdisk -Z -a 2048 -o /dev/sda -n 1::+512M -n 2::: -t 1:ef00 
 
-mkfs.fat -F32 /dev/sda1 -L boot
+mkfs.fat -F32 /dev/sda1
 mkfs.ext4 /dev/sda2 -L root
 
 mount /dev/sda2 /mnt
