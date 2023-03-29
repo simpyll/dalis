@@ -23,4 +23,9 @@ arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
 arch-chroot /mnt /bin/bash -c 'efibootmgr -d /dev/sda -c -L "Arch Linux" -l vmlinuz-linux -u "root=UUID=$(blkid -s UUID -o value /dev/sda2) rw quiet initrd=intel-ucode.img initrd=initramfs-linux.img"'
 
 arch-chroot /mnt /bin/bash -c 'systemctl enable dhcpcd'
-arch-chroot /mnt /bin/bash -c 'systemctl enable NetworkManager.service'
+arch-chroot /mnt /bin/bash -c 'systemctl enable NetworkManager.service' 
+
+arch-chroot /mnt /bin/bash -c 'passed 
+
+umount -R /mnt 
+poweroff
