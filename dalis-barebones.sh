@@ -9,7 +9,7 @@ mount /dev/sda2 /mnt
 mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 
-pacstrap -i /mnt base base-devel linux linux-headers intel-ucode vim
+pacstrap /mnt base base-devel linux linux-headers intel-ucode vim
 
 genfstab -p /mnt >> /mnt/etc/fstab
 
@@ -17,8 +17,8 @@ arch-chroot /mnt /bin/bash
 
 mkinitcpio -p Linux 
 
-arch-chroot /mnt /bin/bash -c 'pacman -S netctl dialog dhcpcd iw wpa_supplicant networkmanager network-manager-applet'
-arch-chroot /mnt /bin/bash -c 'pacman -S grub efibootmgr' 
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm netctl dialog dhcpcd iw wpa_supplicant networkmanager network-manager-applet'
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm grub efibootmgr' 
 
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=arch_grub --recheck'
 arch-chroot /mnt /bin/bash -c 'grub-mkconfig -o /boot/grub/grub.cfg'
