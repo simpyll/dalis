@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "KEYMAP=us" > /etc/vconsole.conf
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime
