@@ -49,8 +49,8 @@ Note: Script endpoint is dictated by the ability to log in to terminal without i
 
 ## Status 
 
-1. <b>dalis.sh</b> - Broken
-1. <b>dalis-barebones.sh</b> - Working
+1. <b>dalis.sh</b> - Working
+1. <b>basic-config.sh</b> - Working
 1. <b>dalis-lvm.sh</b> - Broken
 1. <b>dalis-luks.sh</b> - Broken
 1. <b>dalis-lvm-luks.sh</b> - Broken
