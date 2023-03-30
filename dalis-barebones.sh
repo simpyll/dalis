@@ -32,21 +32,5 @@ arch-chroot /mnt /bin/bash -c 'systemctl start NetworkManager.service'
 
 arch-chroot /mnt /bin/bash -c 'passwd'
 
-arch-chroot /mnt /bin/bash -c 'echo "KEYMAP=us" > /etc/vconsole.conf'
-arch-chroot /mnt /bin/bash -c 'echo "en_US.UTF-8 UTF-8" > /etc/locale.gen'
-arch-chroot /mnt /bin/bash -c 'ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime'
-arch-chroot /mnt /bin/bash -c 'locale-gen'
-arch-chroot /mnt /bin/bash -c 'hwclock --systohc --utc'
-arch-chroot /mnt /bin/bash -c 'echo "127.0.0.1 localhost
-::1 localhost
-127.0.1.1 archlinux.localdomain archlinux" >> /etc/hosts'
-arch-chroot /mnt /bin/bash -c 'echo "archlinux" > /etc/hostname'
-arch-chroot /mnt /bin/bash -c 'hostnamectl set-hostname archlinux'
-
-arch-chroot /mnt /bin/bash -c 'useradd -m david'
-arch-chroot /mnt /bin/bash -c 'passwd david'
-arch-chroot /mnt /bin/bash -c 'usermod -aG wheel,audio,video,storage david'
-arch-chroot /mnt /bin/bash -c "perl -i -pe 's/# (%wheel ALL=\(ALL\) ALL)/$1/' /etc/sudoers"
-
 umount -R /mnt 
 poweroff
