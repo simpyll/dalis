@@ -18,7 +18,7 @@ genfstab -p /mnt >> /mnt/etc/fstab
 
 mkinitcpio -p Linux 
 
-arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm dhcpcd networkmanager'
+arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm netctl dialog dhcpcd iw wpa_supplicant networkmanager'
 arch-chroot /mnt /bin/bash -c 'pacman -S --noconfirm grub efibootmgr' 
 
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=arch_grub --recheck'
