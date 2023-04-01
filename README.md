@@ -1,5 +1,5 @@
 <h2 align="center">
-DALIS
+DALIS Testing
 </h2>
 <p align="center">
 David's Arch Linux Install Scripts
